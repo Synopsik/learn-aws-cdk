@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { config } from 'dotenv'
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +34,7 @@ const dynamodb = DynamoDBDocumentClient.from(ddbClient, { marshallOptions });
 app.use(cors());
 app.use(express.json());
 
-app.post('/', async (req, res) => {
+app.post('/', async (req: Request, res: Response) => {
   const { name, description, completed } = req.body.todo;
 
   const todo = {
@@ -59,7 +59,7 @@ app.post('/', async (req, res) => {
   });
 });
 
-app.get('/', async (_, res) => {
+app.get('/', async (_: Request, res: Response) => {
   const params: QueryCommandInput = {
     TableName: 'main_table',
     ExpressionAttributeNames: {
@@ -80,7 +80,7 @@ app.get('/', async (_, res) => {
   });
 });
 
-app.get('/healthcheck', async (_, res) => res.status(200).send(JSON.stringify('OK')));
+app.get('/healthcheck', async (_: Request, res: Response) => res.status(200).send(JSON.stringify('OK')));
 
 app.listen(port, () => {
   console.info(`API listening on port ${port}`)
